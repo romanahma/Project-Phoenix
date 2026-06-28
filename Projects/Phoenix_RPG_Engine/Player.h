@@ -11,6 +11,7 @@ private:
     int health;
     int level;
     int gold;
+    int xp;
     std::string weapon;
 
     std::vector<std::string> inventory;
@@ -24,14 +25,25 @@ public:
     int GetHealth();
     int GetLevel();
     int GetGold();
+    int GetXP();
     std::string GetWeapon();
 
     void TakeDamage(int damage);
+
     void AddGold(int amount);
+
+    void AddXP(int amount);
+
     void LevelUp();
 
     void ShowInventory();
+
     void UsePotion();
+
+    int GetAttackDamage();
+
+    // NEW
+    void UpgradeWeapon();
 };
 
 #endif
