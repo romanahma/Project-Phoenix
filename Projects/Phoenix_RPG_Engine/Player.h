@@ -42,8 +42,11 @@ public:
 
     int GetAttackDamage();
 
-    // NEW
     void UpgradeWeapon();
+
+    // NEW FUNCTIONS
+    void BuyPotion();
+    void OpenShop();
 };
 
 #endif

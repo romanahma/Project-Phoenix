@@ -74,11 +74,11 @@ void Player::AddXP(int amount)
 {
     xp += amount;
 
-    std::cout << "\n+" << amount << " XP Gained!" << std::endl;
+    std::cout << "\n+" << amount << " XP Gained!\n";
 
-    if (xp >= 100)
+    while (xp >= 100)
     {
-        xp = 0;
+        xp -= 100;
         LevelUp();
     }
 }
@@ -97,17 +97,15 @@ void Player::ShowInventory()
 {
     std::cout << "\n======= INVENTORY =======\n";
 
-    if(inventory.empty())
+    if (inventory.empty())
     {
         std::cout << "Inventory Empty!\n";
     }
     else
     {
-        for(int i = 0; i < inventory.size(); i++)
+        for (int i = 0; i < inventory.size(); i++)
         {
-            std::cout << i + 1 << ". "
-                      << inventory[i]
-                      << std::endl;
+            std::cout << i + 1 << ". " << inventory[i] << std::endl;
         }
     }
 
@@ -116,44 +114,35 @@ void Player::ShowInventory()
 
 void Player::UsePotion()
 {
-    bool found = false;
-
-    for(int i = 0; i < inventory.size(); i++)
+    for (int i = 0; i < inventory.size(); i++)
     {
-        if(inventory[i] == "Health Potion")
+        if (inventory[i] == "Health Potion")
         {
             inventory.erase(inventory.begin() + i);
 
             health += 30;
 
-            if(health > 100)
+            if (health > 100)
                 health = 100;
 
             std::cout << "\nHealth Restored (+30)\n";
-            std::cout << "Current Health : "
-                      << health
-                      << std::endl;
-
-            found = true;
-            break;
+            std::cout << "Current Health : " << health << std::endl;
+            return;
         }
     }
 
-    if(!found)
-    {
-        std::cout << "\nNo Health Potion Left!\n";
-    }
+    std::cout << "\nNo Health Potion Left!\n";
 }
 
 int Player::GetAttackDamage()
 {
-    if(weapon == "Wooden Sword")
+    if (weapon == "Wooden Sword")
         return 20;
 
-    if(weapon == "Iron Sword")
+    if (weapon == "Iron Sword")
         return 35;
 
-    if(weapon == "Diamond Sword")
+    if (weapon == "Diamond Sword")
         return 50;
 
     return 10;
@@ -161,38 +150,68 @@ int Player::GetAttackDamage()
 
 void Player::UpgradeWeapon()
 {
-    if(weapon == "Wooden Sword")
+    if (weapon == "Wooden Sword")
     {
         weapon = "Iron Sword";
-
         inventory.push_back("Iron Sword");
 
-        std::cout << "\n=================================\n";
-        std::cout << " Weapon Upgraded!\n";
-        std::cout << " New Weapon : Iron Sword\n";
-        std::cout << " Attack : "
-                  << GetAttackDamage()
-                  << std::endl;
-        std::cout << "=================================\n";
+        std::cout << "\nWeapon Upgraded -> Iron Sword\n";
     }
-
-    else if(weapon == "Iron Sword")
+    else if (weapon == "Iron Sword")
     {
         weapon = "Diamond Sword";
-
         inventory.push_back("Diamond Sword");
 
-        std::cout << "\n=================================\n";
-        std::cout << " Weapon Upgraded!\n";
-        std::cout << " New Weapon : Diamond Sword\n";
-        std::cout << " Attack : "
-                  << GetAttackDamage()
-                  << std::endl;
-        std::cout << "=================================\n";
+        std::cout << "\nWeapon Upgraded -> Diamond Sword\n";
     }
-
     else
     {
         std::cout << "\nMaximum Weapon Already Equipped!\n";
     }
+}
+
+void Player::BuyPotion()
+{
+    if (gold >= 50)
+    {
+        gold -= 50;
+        inventory.push_back("Health Potion");
+
+        std::cout << "\nPotion Purchased!\n";
+    }
+    else
+    {
+        std::cout << "\nNot enough Gold!\n";
+    }
+}
+
+void Player::OpenShop()
+{
+    int choice;
+
+    do
+    {
+        std::cout << "\n========== SHOP ==========\n";
+        std::cout << "Gold : " << gold << std::endl;
+        std::cout << "1. Buy Health Potion (50 Gold)\n";
+        std::cout << "2. Exit Shop\n";
+        std::cout << "Choose : ";
+
+        std::cin >> choice;
+
+        switch(choice)
+        {
+            case 1:
+                BuyPotion();
+                break;
+
+            case 2:
+                std::cout << "Leaving Shop...\n";
+                break;
+
+            default:
+                std::cout << "Invalid Choice!\n";
+        }
+
+    } while(choice != 2);
 }
